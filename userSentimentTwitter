@@ -1,0 +1,47 @@
+###Using R: Below code will allow you to get Twitter feed. You’ll have to get your own consumerKey and consumerSecret for your twitter account. Please create a dummy API in twitter and that’ll get you these codes.
+###later while running below code, you’ll be asked to run an URL generated for this session and that’ll auth the session to get the public tweets you are searching. Try and let me know.
+
+#######Initial Package Install for Twitter data extract ####################
+############################################################################
+sessionInfo()
+install.packages("twitteR")
+install.packages("rjson")
+install.packages("ROAuth")
+install.packages("digest")
+install.packages("RCurl")
+install.packages("bitops")
+
+
+###Call packages
+library(twitteR)
+
+####SSL set up in the machine
+#############################
+options(RCurlOptions = list(cainfo = system.file("CurlSSL", "cacert.pem", package = "RCurl")))
+
+#####ORAuth Twitter to get the feed
+###################################
+reqURL <- "https://api.twitter.com/oauth/request_token"
+accessURL <- "https://api.twitter.com/oauth/access_token"
+authURL <- "https://api.twitter.com/oauth/authorize"
+consumerKey <- <###Use your Consumer Key>
+consumerSecret <- <### Use your Consumer Secret>
+twitCred <- OAuthFactory$new(consumerKey=consumerKey,
+                             consumerSecret=consumerSecret,
+                             requestURL=reqURL,
+                             accessURL=accessURL,
+                             authURL=authURL)
+twitCred$handshake()
+###Copy and paste the url in browser and get the pin. paste it to the console.
+
+#### TEst Authoraization
+######################## - Below command should return TRUE
+registerTwitterOAuth(twitCred)
+
+####################################################################################################
+
+
+airtel =searchTwitter(“@airtel_presence”,n=1500)
+
+BJP =searchTwitter("#bjp",n=1500)
+tweets_bjp = do.call("rbind",lapply(BJP,as.data.frame))
